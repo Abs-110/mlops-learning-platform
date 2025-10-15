@@ -368,6 +368,7 @@ class MLOpsHandler(BaseHTTPRequestHandler):
                         <h3>{module['title']}</h3>
                         <p><strong>Level:</strong> {module['level'].title()}</p>
                         <p><strong>Status:</strong> {status}</p>
+                        <p><strong>Description:</strong> {module['description']}</p>
                         <a href="/learn/{module_id}" class="btn">{button_text}</a>
                     </div>
             """
