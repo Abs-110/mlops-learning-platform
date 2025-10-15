@@ -2,6 +2,9 @@
 
 A comprehensive web application that teaches Machine Learning Operations (MLOps) from beginner to expert level through interactive modules, hands-on projects, and real-world applications.
 
+## 🌐 **Live Demo**
+**Try the app live at: [Your Render URL will go here]**
+
 ## Features ✨
 
 - **Progressive Learning Path**: 4 levels (Beginner → Intermediate → Advanced → Expert)
@@ -12,32 +15,25 @@ A comprehensive web application that teaches Machine Learning Operations (MLOps)
 - **Responsive Design**: Works on desktop, tablet, and mobile
 - **External Resources**: Curated links to videos, articles, and documentation
 
-## Quick Start 🏃‍♂️
+## 🚀 **Quick Start**
 
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package installer)
+### **Option 1: Try the Live App**
+1. Visit the deployed app (link will be added after deployment)
+2. Create an account
+3. Start learning immediately!
 
-### Installation
+### **Option 2: Run Locally**
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/mlops-learning-platform.git
+cd mlops-learning-platform
 
-1. **Clone or download the project files**
+# Run the app (no dependencies needed)
+python simple_app.py
 
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the application:**
-   ```bash
-   python app.py
-   ```
-
-4. **Open your browser and visit:**
-   ```
-   http://localhost:5000
-   ```
-
-5. **Create an account and start learning!**
+# Open your browser
+# Go to: http://localhost:8000
+```
 
 ## Project Structure 📁
 
