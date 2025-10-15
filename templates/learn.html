@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}{{ module.title }} - MLOps Learning Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Module Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item">{{ module.level.title() }}</li>
+                    <li class="breadcrumb-item active">{{ module.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ module.title }}</h4>
+                        <span class="badge bg-light text-primary">{{ module.level.title() }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="module-content">
+                        {{ module.content|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb"></i> Key Takeaways
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ module.summary }}</p>
+                </div>
+            </div>
+
+            <!-- External Resources -->
+            {% if module.external_resources %}
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-external-link-alt"></i> Additional Resources
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="resources-list">
+                        {% for resource in module.external_resources %}
+                        <div class="resource-item mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="resource-icon me-3">
+                                    {% if resource.type == 'video' %}
+                                        <i class="fas fa-play-circle text-danger"></i>
+                                    {% elif resource.type == 'article' %}
+                                        <i class="fas fa-newspaper text-primary"></i>
+                                    {% else %}
+                                        <i class="fas fa-link text-secondary"></i>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">{{ resource.title }}</h6>
+                                    <a href="{{ resource.url }}" target="_blank" class="text-decoration-none">
+                                        {{ resource.url }}
+                                        <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quiz Section -->
+            {% if quiz_questions %}
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-question-circle"></i> Knowledge Check
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="quiz-form">
+                        {% for question in quiz_questions %}
+                        <div class="quiz-question mb-4">
+                            <h6 class="fw-bold">{{ loop.index }}. {{ question.question }}</h6>
+                            {% set options = question.options %}
+                            {% for option in options %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="question_{{ question.id }}" 
+                                       id="q{{ question.id }}_option{{ loop.index0 }}" value="{{ loop.index0 }}">
+                                <label class="form-check-label" for="q{{ question.id }}_option{{ loop.index0 }}">
+                                    {{ option }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-check"></i> Submit Quiz
+                        </button>
+                    </form>
+                    <div id="quiz-results" class="mt-3" style="display: none;"></div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Project Section -->
+            {% if project %}
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-code"></i> Hands-on Project
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6>{{ project.title }}</h6>
+                    <p class="mb-3">{{ project.description }}</p>
+                    
+                    {% if project.starter_code %}
+                    <div class="mb-3">
+                        <h6>Starter Code:</h6>
+                        <pre class="bg-light p-3 rounded"><code>{{ project.starter_code }}</code></pre>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#solution">
+                            <i class="fas fa-eye"></i> Show Solution
+                        </button>
+                        <button class="btn btn-success" onclick="markProjectComplete()">
+                            <i class="fas fa-check"></i> Mark Complete
+                        </button>
+                    </div>
+                    
+                    <div class="collapse mt-3" id="solution">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Solution:</h6>
+                            </div>
+                            <div class="card-body">
+                                <pre class="bg-light p-3 rounded"><code>{{ project.solution }}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Complete Module -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Ready to complete this module?</h5>
+                    <p class="card-text">Mark this module as complete to unlock the next one and earn points!</p>
+                    <button class="btn btn-success btn-lg" onclick="completeModule()">
+                        <i class="fas fa-trophy"></i> Complete Module
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> Module Info
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Level:</strong>
+                        <span class="badge bg-{{ 'success' if module.level == 'beginner' else 'warning' if module.level == 'intermediate' else 'danger' if module.level == 'advanced' else 'dark' }}">
+                            {{ module.level.title() }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Estimated Time:</strong> 30-45 minutes
+                    </div>
+                    <div class="mb-3">
+                        <strong>Components:</strong>
+                        <ul class="list-unstyled mt-2">
+                            <li><i class="fas fa-check text-success"></i> Theory Content</li>
+                            <li><i class="fas fa-check text-success"></i> Summary</li>
+                            {% if quiz_questions %}
+                            <li><i class="fas fa-check text-success"></i> Quiz ({{ quiz_questions|length }} questions)</li>
+                            {% endif %}
+                            {% if project %}
+                            <li><i class="fas fa-check text-success"></i> Hands-on Project</li>
+                            {% endif %}
+                            {% if module.external_resources %}
+                            <li><i class="fas fa-check text-success"></i> External Resources</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentModuleId = {{ module.id }};
+
+function completeModule() {
+    // Calculate quiz score if quiz exists
+    let quizScore = 0;
+    const quizForm = document.getElementById('quiz-form');
+    if (quizForm) {
+        // This would normally calculate the actual score
+        // For now, we'll just set a default score
+        quizScore = 80; // Placeholder score
+    }
+    
+    fetch('/complete_module', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            module_id: currentModuleId,
+            quiz_score: quizScore
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Congratulations! Module completed successfully! 🎉');
+            window.location.href = '/dashboard';
+        } else {
+            alert('Error completing module. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error completing module. Please try again.');
+    });
+}
+
+function markProjectComplete() {
+    // This would normally track project completion
+    alert('Project marked as complete! Great job! 👏');
+}
+
+// Quiz submission handler
+document.getElementById('quiz-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Calculate score (simplified)
+    const formData = new FormData(this);
+    let score = 0;
+    let totalQuestions = {{ quiz_questions|length if quiz_questions else 0 }};
+    
+    // This is a simplified scoring - in a real app, you'd check against correct answers
+    const selectedAnswers = formData.getAll('question');
+    score = Math.floor((selectedAnswers.length / totalQuestions) * 100);
+    
+    const resultsDiv = document.getElementById('quiz-results');
+    resultsDiv.innerHTML = `
+        <div class="alert alert-info">
+            <h6><i class="fas fa-chart-line"></i> Quiz Results</h6>
+            <p>You scored: <strong>${score}%</strong></p>
+            <p>Great job! You're ready to move forward.</p>
+        </div>
+    `;
+    resultsDiv.style.display = 'block';
+});
+</script>
+{% endblock %}

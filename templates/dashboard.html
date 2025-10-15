@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MLOps Learning Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient text-white border-0">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="fw-bold mb-2">Welcome back, {{ current_user.username }}! 👋</h2>
+                            <p class="mb-0">Continue your MLOps learning journey. You're making great progress!</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="stats-box">
+                                <h3 class="fw-bold">{{ current_user.total_points }}</h3>
+                                <p class="mb-0">Total Points</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Current Module -->
+        <div class="col-lg-8">
+            {% if current_module %}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-play-circle"></i> Continue Learning
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h4 class="card-title">{{ current_module.title }}</h4>
+                            <p class="card-text text-muted">{{ current_module.description }}</p>
+                            <span class="badge bg-{{ 'success' if current_module.level == 'beginner' else 'warning' if current_module.level == 'intermediate' else 'danger' if current_module.level == 'advanced' else 'dark' }}">
+                                {{ current_module.level.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('learn', module_id=current_module.id) }}" class="btn btn-primary">
+                        <i class="fas fa-book-open"></i> Continue Module
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Learning Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line"></i> Learning Progress
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="progress-circle">
+                                <div class="progress-value">{{ (completed_modules|length / 4 * 100)|round|int }}%</div>
+                                <p class="mt-2 mb-0">Beginner</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-circle">
+                                <div class="progress-value">0%</div>
+                                <p class="mt-2 mb-0">Intermediate</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-circle">
+                                <div class="progress-value">0%</div>
+                                <p class="mt-2 mb-0">Advanced</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="progress-circle">
+                                <div class="progress-value">0%</div>
+                                <p class="mt-2 mb-0">Expert</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements & Stats -->
+        <div class="col-lg-4">
+            <!-- Achievements -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-trophy"></i> Achievements
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if achievements %}
+                        {% for achievement in achievements %}
+                        <div class="achievement-item mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="achievement-badge me-3">
+                                    {{ achievement.badge_icon }}
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">{{ achievement.name }}</h6>
+                                    <p class="text-muted small mb-0">{{ achievement.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No achievements yet. Complete modules to earn badges!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar"></i> Quick Stats
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-primary fw-bold">{{ completed_modules|length }}</h4>
+                            <p class="text-muted small mb-0">Modules Completed</p>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success fw-bold">{{ current_user.current_level.title() }}</h4>
+                            <p class="text-muted small mb-0">Current Level</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
