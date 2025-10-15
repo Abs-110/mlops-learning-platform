@@ -358,6 +358,10 @@ class MLOpsHandler(BaseHTTPRequestHandler):
                 <div class="modules">
         """
         
+        # Debug: Show total modules count
+        total_modules = len(MODULES)
+        dashboard_html += f"<p><strong>Total Modules Available: {total_modules}</strong></p>"
+        
         for module_id, module in MODULES.items():
             completed = module_id in progress['completed_modules']
             status = "Completed" if completed else "Available"
