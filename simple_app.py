@@ -194,7 +194,7 @@ class MLOpsHandler(BaseHTTPRequestHandler):
         <body>
             <div class="container">
                 <div class="hero">
-                    <h1>🚀 MLOps Learning Platform</h1>
+                    <h1>MLOps Learning Platform</h1>
                     <p>Master Machine Learning Operations from Beginner to Expert Level</p>
                     <a href="/register" class="btn">Start Learning</a>
                     <a href="/login" class="btn">Login</a>
@@ -202,19 +202,19 @@ class MLOpsHandler(BaseHTTPRequestHandler):
                 
                 <div class="features">
                     <div class="feature">
-                        <h3>📚 Progressive Learning</h3>
+                        <h3>Progressive Learning</h3>
                         <p>Structured curriculum from basics to advanced concepts</p>
                     </div>
                     <div class="feature">
-                        <h3>🎯 Hands-on Projects</h3>
+                        <h3>Hands-on Projects</h3>
                         <p>Real-world projects and coding exercises</p>
                     </div>
                     <div class="feature">
-                        <h3>🏆 Achievement System</h3>
+                        <h3>Achievement System</h3>
                         <p>Earn badges and track your progress</p>
                     </div>
                     <div class="feature">
-                        <h3>🌐 External Resources</h3>
+                        <h3>External Resources</h3>
                         <p>Curated links to videos, articles, and documentation</p>
                     </div>
                 </div>
@@ -331,7 +331,7 @@ class MLOpsHandler(BaseHTTPRequestHandler):
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>Welcome back, {current_user}! 🎉</h1>
+                    <h1>Welcome back, {current_user}!</h1>
                     <p>Continue your MLOps learning journey</p>
                     <div class="nav">
                         <a href="/dashboard">Dashboard</a>
@@ -360,7 +360,7 @@ class MLOpsHandler(BaseHTTPRequestHandler):
         
         for module_id, module in MODULES.items():
             completed = module_id in progress['completed_modules']
-            status = "✅ Completed" if completed else "📚 Available"
+            status = "Completed" if completed else "Available"
             button_text = "Review" if completed else "Start Learning"
             
             dashboard_html += f"""
@@ -427,23 +427,23 @@ class MLOpsHandler(BaseHTTPRequestHandler):
                 </div>
                 
                 <div class="content">
-                    <h2>📝 Summary</h2>
+                    <h2>Summary</h2>
                     <p>{module['summary']}</p>
                 </div>
                 
                 <div class="resources">
-                    <h2>🔗 External Resources</h2>
+                    <h2>External Resources</h2>
                     {"".join([f'<p><a href="{resource["url"]}" target="_blank" class="resource-link">{resource["title"]}</a> ({resource["type"].title()})</p>' for resource in module['external_resources']])}
                 </div>
                 
-                {f'<a href="/dashboard" class="btn">✅ Module Completed - Return to Dashboard</a>' if completed else f'<button onclick="completeModule({module_id})" class="btn">Complete Module</button>'}
+                {f'<a href="/dashboard" class="btn">Module Completed - Return to Dashboard</a>' if completed else f'<button onclick="completeModule({module_id})" class="btn">Complete Module</button>'}
             </div>
             
             <script>
                 function completeModule(moduleId) {{
                     if (confirm('Mark this module as completed?')) {{
                         // In a real app, this would make an API call
-                        alert('Module completed! 🎉');
+                        alert('Module completed!');
                         window.location.href = '/dashboard';
                     }}
                 }}
@@ -455,21 +455,21 @@ class MLOpsHandler(BaseHTTPRequestHandler):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
     server = HTTPServer(('0.0.0.0', port), MLOpsHandler)
-    print(f"🚀 MLOps Learning Platform running on http://localhost:{port}")
-    print("📚 Features:")
+    print(f"MLOps Learning Platform running on http://localhost:{port}")
+    print("Features:")
     print("   - User registration and login")
     print("   - Learning modules with content")
     print("   - Progress tracking")
     print("   - External resources")
     print("   - Responsive design")
-    print("\n🌐 To access the app, open your browser and go to:")
+    print("\nTo access the app, open your browser and go to:")
     print(f"   http://localhost:{port}")
-    print("\n💡 Demo users you can create:")
+    print("\nDemo users you can create:")
     print("   Username: student1, Email: student1@example.com")
     print("   Username: mlops_user, Email: user@mlops.com")
     
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n👋 Server stopped. Thanks for using MLOps Learning Platform!")
+        print("\nServer stopped. Thanks for using MLOps Learning Platform!")
         server.shutdown()
